@@ -48,7 +48,9 @@ app.post("/", express.json(), async (req, res) => {
   );
 
   // Stream the response straight back to the user.
-  Readable.from(copilotLLMResponse.body).pipe(res);
+  // Node's global fetch returns a WHATWG ReadableStream. Convert it to a Node
+  // readable stream before piping the response back to the client.
+  Readable.fromWeb(copilotLLMResponse.body).pipe(res);
 })
 
 const port = Number(process.env.PORT || '3000')
