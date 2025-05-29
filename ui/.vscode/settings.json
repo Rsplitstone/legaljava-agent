@@ -1,0 +1,31 @@
+{
+  "css.lint.unknownAtRules": "ignore",
+  "css.lint.propertyIgnoredDueToDisplay": "ignore",
+  "css.lint.vendorPrefix": "ignore",
+  "css.lint.unknownVendorSpecificProperties": "ignore",
+  "css.validate": false,
+  "tailwindCSS.validate": true,
+  "tailwindCSS.experimental.classRegex": [
+    ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+    ["classnames\\(([^)]*)\\)", "'([^']*)'"],
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+  "css.customData": [
+    {
+      "atDirectives": [
+        {
+          "name": "@tailwind",
+          "description": "Tailwind CSS directive"
+        },
+        {
+          "name": "@apply",
+          "description": "Tailwind CSS apply directive"
+        },
+        {
+          "name": "@layer",
+          "description": "Tailwind CSS layer directive"
+        }
+      ]
+    }
+  ]
+}
