@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
-import Schedule from './components/Schedule';
+import Schedule from './pages/Schedule';
 import CaseWorkspace from './components/CaseWorkspace';
 import Analytics from './components/Analytics';
 

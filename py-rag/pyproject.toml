@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "legaljava-rag"
+version = "0.1.0"
+description = "RAG service for LegalJava using LangChain and FastAPI"
+authors = ["LegalJava Team"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.104.1"
+uvicorn = {extras = ["standard"], version = "^0.24.0"}
+langchain = "^0.0.350"
+openai = "^1.3.0"
+chromadb = "^0.4.15"
+python-multipart = "^0.0.6"
+pydantic = "^2.5.0"
+psycopg2-binary = "^2.9.9"
+pgvector = "^0.2.4"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+black = "^23.10.0"
+flake8 = "^6.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

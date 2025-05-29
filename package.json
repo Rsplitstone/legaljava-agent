@@ -1,14 +1,23 @@
 {
-  "name": "blackbeard-extension",
+  "name": "legaljava-agent",
   "private": "true",
-  "description": "A basic example of a Copilot Extension",
+  "description": "AI-Powered Legal Assistant with comprehensive dashboard",
   "scripts": {
     "start": "node index.js",
-    "dev": "node --watch index.js"
+    "dev": "node --watch index.js",
+    "ws-server": "node websocket-server.js",
+    "ws-dev": "node --watch websocket-server.js"
   },
-  "type": "module",
-  "dependencies": {
+  "type": "module",  "dependencies": {
     "@octokit/core": "^6.1.2",
-    "express": "^4.19.2"
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "prettier": "^3.2.5"
   }
 }

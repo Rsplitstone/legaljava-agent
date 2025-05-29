@@ -1,0 +1,34 @@
+# Spring Boot Backend Dockerfile
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+
+# Install wget and unzip for Gradle installation
+RUN apt-get update && apt-get install -y wget unzip && rm -rf /var/lib/apt/lists/*
+
+# Install Gradle
+RUN wget https://services.gradle.org/distributions/gradle-8.5-bin.zip \
+    && unzip gradle-8.5-bin.zip \
+    && mv gradle-8.5 /opt/gradle \
+    && rm gradle-8.5-bin.zip
+
+# Set Gradle in PATH
+ENV PATH="/opt/gradle/bin:${PATH}"
+
+# Copy build files
+COPY backend/build.gradle .
+COPY backend/settings.gradle .
+
+# Copy source code
+COPY backend/src src/
+
+# Download dependencies
+RUN gradle dependencies --no-daemon
+
+# Build the application
+RUN gradle build --no-daemon -x test
+
+# Expose port
+EXPOSE 8080
+
+# Run the application
+CMD ["java", "-jar", "build/libs/legaljava-0.0.1-SNAPSHOT.jar"]

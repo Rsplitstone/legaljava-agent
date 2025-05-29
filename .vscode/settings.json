@@ -1,0 +1,45 @@
+{
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.validate": ["javascript", "typescript"],
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "git.enableSmartCommit": true,
+    "workbench.editor.enablePreview": false,
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "css.lint.unknownAtRules": "ignore",
+    "css.lint.propertyIgnoredDueToDisplay": "ignore",
+    "css.lint.vendorPrefix": "ignore",
+    "css.lint.unknownVendorSpecificProperties": "ignore",
+    "css.validate": false,
+    "tailwindCSS.validate": true,
+    "tailwindCSS.experimental.classRegex": [
+        ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+        ["classnames\\(([^)]*)\\)", "'([^']*)'"],
+        ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+    ],    "java.configuration.workspaceCacheLimit": 90,
+    "java.import.gradle.enabled": true,
+    "java.import.gradle.wrapper.enabled": true,    "java.import.gradle.java.home": "/c/Program Files/Zulu/zulu-21",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-21",
+            "path": "/c/Program Files/Zulu/zulu-21"
+        }
+    ],
+    "java.jdt.ls.java.home": "/c/Program Files/Zulu/zulu-21",
+    "java.import.gradle.offline.enabled": false,
+    "java.import.gradle.arguments": "",
+    "java.import.gradle.jvmArguments": "",
+    "java.import.gradle.user.home": "",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.detectJdksAtStart": true,
+    "java.project.sourcePaths": [
+        "backend/src/main/java",
+        "src"
+    ],
+    "java.project.referencedLibraries": [
+        "backend/lib/**/*.jar"
+    ]
+}

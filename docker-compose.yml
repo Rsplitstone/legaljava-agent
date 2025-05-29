@@ -1,0 +1,62 @@
+services:
+  # PostgreSQL with pgvector for embeddings
+  db:
+    image: pgvector/pgvector:pg15
+    environment:
+      POSTGRES_DB: legaljava
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: legaljava
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+  # Spring Boot backend
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/legaljava
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=legaljava
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - RAG_SERVICE_URL=http://py-rag:8000
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+
+  # Python RAG service
+  py-rag:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.py
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DATABASE_URL=postgresql://postgres:legaljava@db:5432/legaljava
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./py-rag:/app
+
+  # React frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8080
+    volumes:
+      - ./ui:/app
+      - /app/node_modules
+
+volumes:
+  pgdata:

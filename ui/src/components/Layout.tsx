@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom';
-import ChatPanel from './sidebar/ChatPanel';
+import ChatPanel from '../sidebar/ChatPanel';
 import clsx from 'clsx';
 
 export default function Layout() {
