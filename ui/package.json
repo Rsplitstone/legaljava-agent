@@ -2,21 +2,30 @@
   "name": "legaljava-ui",
   "private": true,
   "version": "0.0.0",
-  "type": "module",  "scripts": {
+  "type": "module",
+  "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "@hello-pangea/dnd": "^18.0.1",
+    "@heroicons/react": "^2.0.18",
+    "@tanstack/react-query": "^5.79.0",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
+    "@types/react-dropzone": "^4.2.2",
+    "axios": "^1.6.2",
+    "clsx": "^2.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "axios": "^1.6.2",
+    "react-dropzone": "^14.3.8",
     "react-markdown": "^9.0.1",
-    "@headlessui/react": "^1.7.17",
-    "@heroicons/react": "^2.0.18",
+    "react-router-dom": "^7.6.1",
+    "react-toastify": "^11.0.5",
+    "socket.io-client": "^4.8.1",
     "tailwindcss": "^3.3.6"
   },
   "devDependencies": {

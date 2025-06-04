@@ -1,0 +1,27 @@
+[
+  {
+    "id": "backlog",
+    "title": "Backlog",
+    "tasks": [
+      { "id": "task-1", "name": "Review case WC-2024-001 documents" },
+      { "id": "task-2", "name": "Prepare deposition questions" },
+      { "id": "task-3", "name": "Schedule client meeting" }
+    ]
+  },
+  {
+    "id": "in-progress",
+    "title": "In Progress",
+    "tasks": [
+      { "id": "task-4", "name": "Draft settlement proposal" },
+      { "id": "task-5", "name": "Research precedent cases" }
+    ]
+  },
+  {
+    "id": "completed",
+    "title": "Completed",
+    "tasks": [
+      { "id": "task-6", "name": "File initial claim paperwork" },
+      { "id": "task-7", "name": "Contact insurance adjuster" }
+    ]
+  }
+]

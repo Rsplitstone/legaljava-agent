@@ -1,6 +1,15 @@
-import axios from 'axios';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { DragDropContext, Droppable, Draggable, DropResult, DroppableProvided, DraggableProvided } from '@hello-pangea/dnd';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from '@hello-pangea/dnd';
+import { fetchColumns, updateColumns } from '../services/api';
 
 interface Task {
   id: string;
@@ -14,81 +23,89 @@ interface Column {
 }
 
 export default function Schedule() {
-  const queryClient = useQueryClient();
+  const qc = useQueryClient();
 
-  // Fetch columns data
-  const { data: columns = [], isLoading } = useQuery<Column[]>({
+  /** 1 Fetch columns (defaults to [] on first render) */
+  const {
+    data: columns = [],
+    isLoading,
+    isError,
+  } = useQuery<Column[]>({
     queryKey: ['columns'],
-    queryFn: async () => {
-      const response = await axios.get('/api/columns');
-      return response.data;
-    },
+    queryFn: fetchColumns,
+    initialData: [],
   });
 
-  // Update columns data
-  const mutation = useMutation<void, Error, Column[]>(
-    {
-      mutationFn: async (updatedColumns) => {
-        await axios.patch('/api/columns', updatedColumns);
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['columns'] });
-      },
-    }
-  );
+  /** 2 Persist drag-and-drop mutations with optimistic UI */
+  const mutateCols = useMutation({
+    mutationFn: updateColumns,
+    onMutate: async (next: Column[]) => {
+      await qc.cancelQueries({ queryKey: ['columns'] });
+      const prev = qc.getQueryData<Column[]>(['columns']) ?? [];
+      qc.setQueryData(['columns'], next);
+      return { prev };
+    },
+    onError: (_e, _v, ctx) => {
+      if (ctx?.prev) qc.setQueryData(['columns'], ctx.prev);
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: ['columns'] }),
+  });
 
-  const handleDragEnd = (result: DropResult) => {
+  /** 3 Handle drag-end */
+  function onDragEnd(result: DropResult) {
     if (!result.destination) return;
 
-    const sourceIndex = result.source.index;
-    const destinationIndex = result.destination.index;
-    const sourceColumnId = result.source.droppableId;
-    const destinationColumnId = result.destination.droppableId;
+    const srcColIdx = columns.findIndex(c => c.id === result.source.droppableId);
+    const dstColIdx = columns.findIndex(c => c.id === result.destination!.droppableId);
+    if (srcColIdx < 0 || dstColIdx < 0) return;
 
-    const updatedColumns = columns.map((col) => ({ ...col }));
-    const sourceColumn = updatedColumns.find((col) => col.id === sourceColumnId);
-    const destinationColumn = updatedColumns.find((col) => col.id === destinationColumnId);
+    const srcCol = { ...columns[srcColIdx] };
+    const dstCol = srcColIdx === dstColIdx ? srcCol : { ...columns[dstColIdx] };
 
-    if (sourceColumn && destinationColumn) {
-      const [movedTask] = sourceColumn.tasks.splice(sourceIndex, 1);
-      destinationColumn.tasks.splice(destinationIndex, 0, movedTask);
+    const [moved] = srcCol.tasks.splice(result.source.index, 1);
+    dstCol.tasks.splice(result.destination.index, 0, moved);
 
-      mutation.mutate(updatedColumns);
-    }
-  };
+    const next = [...columns];
+    next[srcColIdx] = srcCol;
+    next[dstColIdx] = dstCol;
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+    mutateCols.mutate(next);
   }
 
+  /* ---------- render ---------- */
+  if (isLoading) return <p className="p-4">Loading board…</p>;
+  if (isError)   return <p className="p-4 text-red-600">Cannot load board.</p>;
+  if (!columns.length)
+    return <p className="p-4">No columns available. Add tasks to get started.</p>;
+
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="kanban-board">
-        {columns.map((column) => (
-          <Droppable droppableId={column.id} key={column.id}>
-            {(provided: DroppableProvided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="kanban-column"
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="flex gap-6 overflow-x-auto p-4">
+        {columns.map(col => (
+          <Droppable droppableId={col.id} key={col.id}>
+            {prov => (
+              <section
+                ref={prov.innerRef}
+                {...prov.droppableProps}
+                className="w-72 shrink-0 rounded-xl bg-gray-100 dark:bg-gray-800 p-3 space-y-3"
               >
-                <h2>{column.title}</h2>
-                {column.tasks.map((task, index) => (
-                  <Draggable draggableId={task.id} index={index} key={task.id}>
-                    {(provided: DraggableProvided) => (
-                      <div
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                        className="kanban-task"
+                <h3 className="font-semibold">{col.title}</h3>
+                {col.tasks.map((t, i) => (
+                  <Draggable draggableId={t.id} index={i} key={t.id}>
+                    {p => (
+                      <article
+                        ref={p.innerRef}
+                        {...p.draggableProps}
+                        {...p.dragHandleProps}
+                        className="rounded-lg bg-white dark:bg-gray-700 p-3 border-l-4 border-accent"
                       >
-                        <p>{task.name}</p>
-                      </div>
+                        {t.name}
+                      </article>
                     )}
                   </Draggable>
                 ))}
-                {provided.placeholder}
-              </div>
+                {prov.placeholder}
+              </section>
             )}
           </Droppable>
         ))}

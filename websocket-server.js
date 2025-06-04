@@ -107,7 +107,7 @@ setInterval(() => {
   });
 }, 60000); // Every minute
 
-const PORT = process.env.WS_PORT || 3001;
+const PORT = process.env.WS_PORT || 3002;
 
 httpServer.listen(PORT, () => {
   console.log(`🚀 WebSocket server running on port ${PORT}`);

@@ -70,6 +70,35 @@ const MOCK_CASES: WorkersCompCase[] = [
   }
 ];
 
+// Mock columns data for Kanban board
+const MOCK_COLUMNS = [
+  {
+    id: 'todo',
+    title: 'To Do',
+    tasks: [
+      { id: 'task-1', name: 'Review case WC-2024-001 documents' },
+      { id: 'task-2', name: 'Prepare deposition questions' },
+      { id: 'task-3', name: 'Schedule client meeting' }
+    ]
+  },
+  {
+    id: 'in-progress',
+    title: 'In Progress',
+    tasks: [
+      { id: 'task-4', name: 'Draft settlement proposal' },
+      { id: 'task-5', name: 'Research precedent cases' }
+    ]
+  },
+  {
+    id: 'completed',
+    title: 'Completed',
+    tasks: [
+      { id: 'task-6', name: 'File initial claim paperwork' },
+      { id: 'task-7', name: 'Contact insurance adjuster' }
+    ]
+  }
+];
+
 const USE_MOCK_DATA = true; // Set to false when backend is ready
 
 export const legalService = {
@@ -252,6 +281,30 @@ export const legalService = {
     const response = await api.get('/chat/health');
     return response.data;
   },
+};
+
+// API service for columns (kanban board)
+export const fetchColumns = async () => {
+  try {
+    // Try to fetch from backend API
+    const response = await api.get('/columns');
+    return response.data;
+  } catch (error) {
+    console.log('Error fetching columns from API, using mock data instead:', error);
+    // Return mock data if API call fails
+    return MOCK_COLUMNS;
+  }
+};
+
+export const updateColumns = async (columns: any[]) => {
+  try {
+    const response = await api.patch('/columns', columns);
+    return response.data;
+  } catch (error) {
+    console.log('Error updating columns, this would save to API in production:', columns);
+    // In a real app, we'd throw the error, but for demo purposes we pretend it succeeded
+    return MOCK_COLUMNS;
+  }
 };
 
 // Simple upload function for DocumentUpload component

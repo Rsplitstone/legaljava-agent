@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
-import './FileDrop.css';
 
 interface FileDropProps {
   onFiles?: (files: File[]) => void;
@@ -9,10 +8,10 @@ interface FileDropProps {
 export default function FileDrop({ onFiles }: FileDropProps) {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     multiple: true,
-    onDrop: async (acceptedFiles) => {
+    onDrop: async (acceptedFiles: File[]) => {
       try {
         const formData = new FormData();
-        acceptedFiles.forEach((file) => formData.append('file', file));
+        acceptedFiles.forEach((file: File) => formData.append('file', file));
 
         const response = await axios.post('/api/files', formData, {
           headers: {

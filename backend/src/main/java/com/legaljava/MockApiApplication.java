@@ -2,8 +2,6 @@ package com.legaljava;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,14 +12,12 @@ import java.util.Map;
 import java.util.Arrays;
 import java.util.List;
 
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
+@SpringBootApplication
 public class MockApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(MockApiApplication.class, args);
-    }
-
-    @RestController
-    @RequestMapping("/api")
+    }    @RestController
+    @RequestMapping("/")
     @CrossOrigin(origins = { "http://localhost:5173", "http://localhost:5174" })
     public static class MockApiController {
 

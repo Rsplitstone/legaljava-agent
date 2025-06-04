@@ -1,4 +1,4 @@
-package main.java.com.legaljava.entity;
+package com.legaljava.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;

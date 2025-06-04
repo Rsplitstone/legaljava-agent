@@ -1,0 +1,27 @@
+.file-drop {
+  border: 2px dashed #e5e7eb;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.file-drop:hover {
+  border-color: #3b82f6;
+  background-color: #f8fafc;
+}
+
+.file-drop.active {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.file-drop-text {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.file-drop.active .file-drop-text {
+  color: #3b82f6;
+}
